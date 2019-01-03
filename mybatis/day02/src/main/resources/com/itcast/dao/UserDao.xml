@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--指定被映射的dao文件坐标，namespace必须属性，用于指定全限定类名（选中文件鼠标右键，copyreference）-->
+<mapper namespace="com.itcast.dao.UserDao" >
+<!--查询所有，指定结果集封装为User-->
+    <select id="findAll" resultType="com.itcast.domain.User">
+        select * from user
+    </select>
+    <!--添加数据，如果要返回添加后的数据的id，需要selectKey标签-->
+    <insert id="addUser" >
+        <!--resultType:指定返回值类型Long.
+
+        keyProperty:selectKey 语句结果应该被设置的目标属性。如果希望得到多个生成的列，
+        也可以是逗号分隔的属性名称列表。
+
+        keyColumn:匹配属性的返回结果集中的列名称。如果希望得到多个生成的列，也可以是逗号分隔的属性名称列表。
+
+        order:这可以被设置为 BEFORE 或 AFTER。如果设置为 BEFORE，那么它会首先选择主键，
+        设置 keyProperty 然后执行插入语句。如果设置为 AFTER，那么先执行插入语句，
+        然后是 selectKey 元素 - 这和 Oracle 的数据库相似，在插入语句内部可能有嵌入索引调用。-->
+        <selectKey resultType="Long" keyProperty="id" keyColumn="id">
+            <!--指定查询id-->
+            select last_insert_id()
+        </selectKey>
+        <!--sql语句-->
+        insert into user (username,birthday,sex,address) values(#{username},#{birthday},#{sex},#{address})
+    </insert>
+    <!--通过id修改数据-->
+    <update id="updateUser" parameterType="com.itcast.domain.User">
+        update user set username=#{username},address = #{address} where id = #{id}
+    </update>
+    <!--通过id删除-->
+    <delete id="deleteUser" parameterType="Long">
+        delete from user where id = #{id}
+    </delete>
+    <!--通过id查询-->
+    <select id="findById" parameterType="Long" resultType="com.itcast.domain.User">
+        select * from user where id = #{id}
+    </select>
+    <!--模糊查询1：给参数时再指定模糊条件-->
+    <select id="findByName" resultType="com.itcast.domain.User" parameterType="String">
+        select * from user where username like #{username}
+    </select>
+    <!--模糊查询2：编辑sql时给定模糊条件，如果传输单个简单类型参数 则${value}固定，不可变-->
+    <select id="findByName2" resultType="com.itcast.domain.User" parameterType="String">
+        select * from user where username like '%${value}%'
+    </select>
+    <!--查询总记录数-->
+    <select id="findTotalCount" resultType="int">
+        select count(*) from user
+    </select>
+    <!--根据封装参数对象进行模糊查询-->
+    <select id="findByVo" parameterType="com.itcast.domain.QueryVo" resultType="com.itcast.domain.User">
+        select * from user where sex like #{user.sex}
+    </select>
+</mapper>

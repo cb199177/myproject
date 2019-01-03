@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<!--固定标签-->
+<configuration>
+    <!--配置mybatis环境-->
+    <environments default="mysql">
+        <!--配置mysql环境-->
+        <environment id="mysql">
+            <!--配置事务类型-->
+            <transactionManager type="JDBC"></transactionManager>
+            <!--配置数据源-->
+            <dataSource type="POOLED">
+                <!--指定mysql相关信息（驱动，路径，账号密码）-->
+                <property name="driver" value="com.mysql.jdbc.Driver"/>
+                <property name="url" value="jdbc:mysql://localhost:3306/db2"/>
+                <property name="username" value="root"/>
+                <property name="password" value="root"/>
+            </dataSource>
+        </environment>
+    </environments>
+    <mappers>
+        <!--指定映射的xml文件坐标-->
+        <mapper resource="com/itcast/dao/UserDao.xml"></mapper>
+        <mapper resource="com/itcast/dao/UserDaoByResultMap.xml"></mapper>
+    </mappers>
+</configuration>
